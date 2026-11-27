@@ -16,6 +16,7 @@ no cloud service, no account.
 [![Chrome](https://img.shields.io/badge/Chrome%20%7C%20Edge-Extension-4285F4.svg)](https://www.google.com/chrome/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-1.0.0-orange.svg)](CHANGELOG.md)
+[![CI](https://github.com/NurAbir/Paradox/actions/workflows/ci.yml/badge.svg)](https://github.com/NurAbir/Paradox/actions/workflows/ci.yml)
 
 </div>
 
@@ -154,9 +155,12 @@ More in [`docs/USAGE.md`](docs/USAGE.md).
 paradox/
   README.md                 this file
   LICENSE                   MIT
+  SECURITY.md               how to report a vulnerability
   CREDITS.md                attribution for Kokoro and the libraries used
   CHANGELOG.md              release history
   CONTRIBUTING.md           how to help and develop
+  .editorconfig             shared editor settings
+  .github/                  CI workflow and issue templates
   setup.ps1 / setup.bat     one-time environment + model setup
   "Start server.bat"        run the local TTS server
   "Kokoro TTS.bat"          desktop GUI
@@ -177,8 +181,9 @@ paradox/
     icons/                  16 / 48 / 128 px
   tools/
     check_server.py         command-line smoke test
+    checksums.py            generate / verify SHA-256 manifests
     make_icons.py           regenerate the logo assets and icons
-  docs/                     SETUP, USAGE, ARCHITECTURE
+  docs/                     SETUP, USAGE, ARCHITECTURE, CHECKSUMS
   assets/                   logo artwork
   models/                   downloaded model files  (ignored by git)
   voices/                   extra voice packs       (ignored by git)
@@ -211,6 +216,19 @@ empty placeholders (`.gitkeep`) and are filled in by `setup.bat`.
 | No sound at all | Check the Windows output device, then test with `tools\check_server.py`. |
 | Extension menu missing on the page | Reload the extension in `chrome://extensions`, then reload the tab. Confirm the URL is `novelphoenix.com`. |
 | Voice list is empty | The server was offline when the popup opened. Start it, then press **Check**. |
+
+## Verifying downloads
+
+Model files are checked automatically during setup. To re-check them at any
+time:
+
+```bat
+.venv\Scripts\python Kokoro-TTS\download_models.py --check
+```
+
+The canonical SHA-256 values, and how to verify a release archive, are in
+[`docs/CHECKSUMS.md`](docs/CHECKSUMS.md). A general checksum tool is available
+as `tools/checksums.py`.
 
 ## Credits
 

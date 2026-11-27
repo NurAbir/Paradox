@@ -232,3 +232,4 @@ The model is **not** stored anywhere else except the Hugging Face cache under
 | `ffmpeg not found` | Optional. Install FFmpeg and add it to `PATH` for MP3; otherwise WAV is used. |
 | `Failed to hardlink files` (`uv`) | Benign. The uv cache and the project are on different drives, so uv copies instead. `setup.ps1` sets `UV_LINK_MODE=copy`, which silences it. |
 | `You are sending unauthenticated requests to the HF Hub` | Benign. It only means no Hugging Face token is stored, which is fine for these public model downloads. A token is never required. |
+| `sha256 mismatch` after downloading the model | The download is incomplete or corrupt. Delete `models\Kokoro-82M` and rerun `setup.bat`; the loader resumes and re-verifies. See [`CHECKSUMS.md`](CHECKSUMS.md). |

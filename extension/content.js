@@ -85,6 +85,7 @@
   }
 
   // -------------------------------------------------------------- extraction #
+  // Find a previous/next link, tolerating class changes on the site.
   function navHref(root, dir, pageUrl) {
     const candidates =
       dir === "next"
@@ -111,6 +112,7 @@
     return PROMO.some((re) => re.test(line));
   }
 
+  // Pull clean paragraphs out of a chapter container (live page or fetched HTML).
   function extractChapter(root, pageUrl) {
     const content =
       (root.querySelector && root.querySelector("#content")) ||
@@ -228,6 +230,7 @@
   }
 
   // ------------------------------------------------------------------- audio #
+  // Ask the local server for a whole-chapter MP3; fall back to the worker.
   async function requestTTS(text) {
     const payload = {
       text,
@@ -369,6 +372,7 @@
   }
 
   // -------------------------------------------------------------- reading flow #
+  // Extract the current chapter, synthesize it, and begin playback.
   async function startReading({ autoplay = true } = {}) {
     if (!state.settings.enabled) {
       setStatus("Reader is off - enable it in the settings.", "");
@@ -426,6 +430,7 @@
     }
   }
 
+  // Load a chapter in place when possible, otherwise fall back to navigation.
   async function goTo(url, { push = true } = {}) {
     if (!url) return;
     let target;

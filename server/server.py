@@ -65,6 +65,10 @@ except Exception:  # pragma: no cover - import problems are shown clearly
 
 # --------------------------------------------------------------------------- #
 # Engine (loaded once, in the background, then reused for every request)
+#
+# The engine is shared by every request thread. It is created in a background
+# thread so the HTTP socket can answer /health immediately; /tts waits on
+# _engine_ready before it touches the model.
 # --------------------------------------------------------------------------- #
 _engine = None
 _engine_error: str | None = None
@@ -77,6 +81,7 @@ def _log(msg: str) -> None:
 
 
 def load_engine(device: str) -> None:
+    """Load the model in the background, then warm up the default voice."""
     global _engine, _engine_error
     try:
         _log("Loading Kokoro model ...")
@@ -104,6 +109,7 @@ def load_engine(device: str) -> None:
 
 
 def get_engine(timeout: float = 300.0):
+    """Return the shared engine, waiting for the initial model load."""
     if not _engine_ready.wait(timeout):
         raise RuntimeError("TTS model is still loading, try again in a moment.")
     if _engine is None:
@@ -122,6 +128,7 @@ def synth_to_bytes(text: str, voice: str, speed: float, fmt: str):
         raise ValueError("nothing speakable in this text")
 
     audio_seconds = audio.size / kokoro.SAMPLE_RATE
+    # Encode in a private temporary folder; only the bytes leave this function.
     tmpdir = Path(tempfile.mkdtemp(prefix="np_tts_"))
     try:
         fmt = (fmt or DEFAULT_FORMAT).lower()

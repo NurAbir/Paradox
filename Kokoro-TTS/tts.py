@@ -226,6 +226,7 @@ def stop_playback() -> None:
 # Engine
 # --------------------------------------------------------------------------- #
 def clean_text(text: str) -> str:
+    """Normalise line endings and collapse noisy whitespace before synthesis."""
     text = text.replace("\ufeff", "").replace("\r\n", "\n").replace("\r", "\n")
     text = re.sub(r"[ \t]+", " ", text)
     text = re.sub(r"\n{3,}", "\n\n", text)
@@ -266,6 +267,7 @@ class KokoroEngine:
         self._log(f"Kokoro loaded on {self.device.upper()} in {time.time() - t0:.1f}s")
 
     def pipeline(self, lang: str):
+        """Return (and cache) a KPipeline for a language code."""
         lang = lang.lower()[:1]
         if lang not in LANG_NAMES:
             raise TTSError(f"Unknown language code '{lang}'. Supported: {', '.join(sorted(LANG_NAMES))}")
@@ -291,6 +293,7 @@ class KokoroEngine:
             return pipe
 
     def _preload_voice(self, pipe, voice: str) -> None:
+        """Load voice packs from disk so the pipeline does not fetch them."""
         import torch
 
         for name in voice.split(","):
@@ -310,6 +313,7 @@ class KokoroEngine:
         progress: Optional[Callable[[int, float], None]] = None,
         cancel: Optional[threading.Event] = None,
     ) -> np.ndarray:
+        """Synthesize text and return one float32 NumPy array at 24 kHz."""
         text = clean_text(text)
         if not text:
             return np.zeros(0, dtype=np.float32)
@@ -332,6 +336,7 @@ class KokoroEngine:
         return np.concatenate(chunks) if chunks else np.zeros(0, dtype=np.float32)
 
     def warmup(self, voice: str = DEFAULT_VOICE) -> None:
+        """Run one short synthesis so the first real request is fast."""
         try:
             self.synth("Ready.", voice=voice, speed=1.0)
         except Exception:

@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Python syntax
+        run: |
+          python -m py_compile \
+            server/server.py \
+            Kokoro-TTS/tts.py \
+            Kokoro-TTS/gui.py \
+            Kokoro-TTS/download_models.py \
+            tools/check_server.py \
+            tools/make_icons.py \
+            tools/checksums.py
+
+      - name: JavaScript syntax
+        run: |
+          node --check extension/background.js
+          node --check extension/content.js
+          node --check extension/popup.js
+
+      - name: Validate extension manifest
+        run: |
+          python -c "import json; json.load(open('extension/manifest.json', encoding='utf-8')); print('manifest OK')"
+
+      - name: Validate shell launchers exist
+        run: |
+          test -f "Start server.bat"
+          test -f setup.bat
+          test -f "Kokoro TTS.bat"
