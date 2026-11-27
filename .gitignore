@@ -1,0 +1,45 @@
+# ---------------------------------------------------------------------------
+# Paradox - files that are generated locally and should never be committed
+# ---------------------------------------------------------------------------
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python bytecode and build output
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Kokoro model files and voice packs (large; rebuild with setup.bat)
+models/*
+!models/.gitkeep
+voices/*
+!voices/.gitkeep
+
+# Generated audio, logs and caches
+output/*
+!output/.gitkeep
+*.log
+
+# Local user settings written by the desktop app
+config.json
+
+# Ad-hoc test artifacts
+tools/_*
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini

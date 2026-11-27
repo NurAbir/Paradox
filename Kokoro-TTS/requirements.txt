@@ -1,0 +1,15 @@
+# Kokoro TTS runtime packages (Python 3.12).
+#
+# PyTorch is installed separately by setup.ps1 so the CUDA or CPU wheel can be
+# chosen for the machine. To install by hand:
+#
+#   pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu126
+#   pip install -r Kokoro-TTS/requirements.txt
+#
+# numpy is pinned below 2.5: torch 2.14 fails to import with numpy 2.5.x.
+
+numpy==2.3.5
+kokoro==0.9.4
+misaki[en,zh]==0.9.4
+soundfile==0.14.0
+huggingface_hub>=0.23

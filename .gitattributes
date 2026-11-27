@@ -1,0 +1,21 @@
+# Normalise text files to LF in the repository, but check out the line endings
+# each platform expects.
+* text=auto
+
+# Windows scripts must keep CRLF so double-clicking them works from Explorer.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary assets - never let git touch these.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.gif binary
+*.pt binary
+*.pth binary
+*.wav binary
+*.mp3 binary
+*.flac binary
+*.ogg binary

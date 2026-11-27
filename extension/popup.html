@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Paradox</title>
+  <style>
+    :root {
+      --bg: #15151f;
+      --panel: #1e1e2b;
+      --text: #eef0ff;
+      --muted: #9a9cbb;
+      --accent: #7c6cff;
+      --line: rgba(255, 255, 255, .09);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      width: 340px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", system-ui, sans-serif;
+      font-size: 13px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 13px 14px 10px;
+      border-bottom: 1px solid var(--line);
+    }
+    .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: #6b6b85; flex: 0 0 auto;
+    }
+    .dot.ok { background: #35d07f; box-shadow: 0 0 8px rgba(53,208,127,.7); }
+    .dot.busy { background: #f5b642; box-shadow: 0 0 8px rgba(245,182,66,.7); }
+    .dot.err { background: #ff5d6c; box-shadow: 0 0 8px rgba(255,93,108,.7); }
+    h1 { font-size: 14px; margin: 0; font-weight: 700; letter-spacing: .2px; }
+    .status { margin-left: auto; color: var(--muted); font-size: 11.5px; text-align: right; }
+    main { padding: 12px 14px 14px; display: grid; gap: 11px; }
+    .toggle { display: flex; align-items: center; gap: 9px; color: var(--text); }
+    .toggle input { width: 15px; height: 15px; accent-color: var(--accent); }
+    .toggle span small { display: block; color: var(--muted); font-size: 11px; }
+    .field { display: flex; align-items: center; gap: 9px; }
+    .field > label { flex: 0 0 52px; color: var(--muted); }
+    select, input[type="number"] {
+      flex: 1 1 auto; min-width: 0;
+      font: inherit; color: var(--text);
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: 8px; padding: 6px 8px;
+    }
+    input[type="range"] { flex: 1 1 auto; accent-color: var(--accent); }
+    .speedval { flex: 0 0 44px; text-align: right; color: #c9c2ff; font-variant-numeric: tabular-nums; }
+    .row2 { display: flex; gap: 8px; align-items: center; }
+    button {
+      font: inherit; color: var(--text); cursor: pointer;
+      background: rgba(124,108,255,.22); border: 1px solid rgba(124,108,255,.5);
+      border-radius: 8px; padding: 6px 11px;
+    }
+    button:hover { background: rgba(124,108,255,.4); }
+    .hint {
+      color: var(--muted); font-size: 11.5px; line-height: 1.45;
+      border-top: 1px solid var(--line); padding-top: 10px;
+    }
+    .hint b { color: #c9c2ff; }
+    .hint code {
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: 5px; padding: 1px 5px; font-size: 11px;
+    }
+    a { color: #b39dff; }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="dot" id="dot"></span>
+    <h1>Paradox</h1>
+    <span class="status" id="status">Checking…</span>
+  </header>
+
+  <main>
+    <label class="toggle">
+      <input type="checkbox" id="enabled" />
+      <span>Reader enabled <small>Show the control bar on Novel Phoenix</small></span>
+    </label>
+
+    <label class="toggle">
+      <input type="checkbox" id="autoRead" />
+      <span>Read when a chapter opens <small>Start generating as soon as the page loads</small></span>
+    </label>
+
+    <label class="toggle">
+      <input type="checkbox" id="autoNext" />
+      <span>Continue to next chapter <small>Keep reading when a chapter ends</small></span>
+    </label>
+
+    <label class="toggle">
+      <input type="checkbox" id="seamless" />
+      <span>Switch chapters in place <small>Next / Prev load without a page reload</small></span>
+    </label>
+
+    <div class="field">
+      <label for="voice">Voice</label>
+      <select id="voice"></select>
+    </div>
+
+    <div class="field">
+      <label for="speed">Speed</label>
+      <input type="range" id="speed" min="0.5" max="2" step="0.05" />
+      <b class="speedval" id="speedVal">1.0x</b>
+    </div>
+
+    <div class="field">
+      <label for="port">Port</label>
+      <div class="row2" style="flex:1 1 auto;">
+        <input type="number" id="port" min="1" max="65535" style="flex:1 1 auto;" />
+        <button id="check">Check</button>
+      </div>
+    </div>
+
+    <div class="hint">
+      Audio is generated locally by <b>Paradox</b> (Kokoro). Start the server first by
+      double-clicking <code>Start server.bat</code> in the Paradox folder,
+      then open any chapter on novelphoenix.com.
+    </div>
+  </main>
+
+  <script src="popup.js"></script>
+</body>
+</html>

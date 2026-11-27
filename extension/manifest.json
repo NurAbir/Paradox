@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "Paradox - Novel Phoenix TTS",
+  "version": "1.0.0",
+  "description": "Paradox reads Novel Phoenix chapters aloud with your own local Kokoro voice. Click Next and it keeps reading.",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://novelphoenix.com/*",
+    "https://www.novelphoenix.com/*",
+    "http://127.0.0.1/*",
+    "http://localhost/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://novelphoenix.com/*",
+        "https://www.novelphoenix.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Paradox"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
