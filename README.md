@@ -22,6 +22,23 @@ no cloud service, no account.
 
 ---
 
+## Contents
+
+- [Description](#description)
+- [Features](#features)
+- [How it works](#how-it-works)
+- [Requirements](#requirements)
+- [Quick start](#quick-start)
+- [The control bar](#the-control-bar)
+- [Standalone text-to-speech](#standalone-text-to-speech)
+- [Project layout](#project-layout)
+- [Documentation](#documentation)
+- [Command-line check](#command-line-check)
+- [Troubleshooting](#troubleshooting)
+- [Verifying downloads](#verifying-downloads)
+- [Credits](#credits)
+- [License](#license)
+
 ## Description
 
 **Paradox** turns a reading session into a listening session. A tiny server on
@@ -153,45 +170,70 @@ More in [`docs/USAGE.md`](docs/USAGE.md).
 
 ```
 paradox/
-  README.md                 this file
-  LICENSE                   MIT
-  SECURITY.md               how to report a vulnerability
-  CREDITS.md                attribution for Kokoro and the libraries used
-  CHANGELOG.md              release history
-  CONTRIBUTING.md           how to help and develop
-  .editorconfig             shared editor settings
-  .github/                  CI workflow and issue templates
-  setup.ps1 / setup.bat     one-time environment + model setup
-  "Start server.bat"        run the local TTS server
-  "Kokoro TTS.bat"          desktop GUI
-  speak.bat / speak_clipboard.bat
-  requirements.txt          -> Kokoro-TTS/requirements.txt
-  Kokoro-TTS/               the TTS engine (no model files)
-    tts.py                  synthesis, voices, audio I/O, CLI
-    gui.py                  small tkinter desktop app
-    download_models.py      fetch model + voices from Hugging Face
-    requirements.txt        runtime package pins
-  server/
-    server.py               local HTTP server (/health, /voices, /tts)
-  extension/                load this folder in Chrome / Edge
-    manifest.json
-    background.js
-    content.js
-    popup.html / popup.js
-    icons/                  16 / 48 / 128 px
-  tools/
-    check_server.py         command-line smoke test
-    checksums.py            generate / verify SHA-256 manifests
-    make_icons.py           regenerate the logo assets and icons
-  docs/                     SETUP, USAGE, ARCHITECTURE, CHECKSUMS
-  assets/                   logo artwork
-  models/                   downloaded model files  (ignored by git)
-  voices/                   extra voice packs       (ignored by git)
-  output/                   generated audio         (ignored by git)
+├─ README.md                  this file
+├─ LICENSE                    MIT licence
+├─ SECURITY.md                how to report a vulnerability
+├─ CREDITS.md                 attribution for Kokoro and the libraries used
+├─ CHANGELOG.md               release history
+├─ CONTRIBUTING.md            how to help and build from source
+├─ .editorconfig              shared editor settings
+├─ .gitattributes             line-ending rules
+├─ .gitignore                 ignores models, voices, output and .venv
+├─ .github/
+│  ├─ workflows/ci.yml        syntax and manifest checks on every push
+│  └─ ISSUE_TEMPLATE/         bug report and feature request forms
+├─ setup.bat / setup.ps1      one-time environment + model setup
+├─ "Start server.bat"         run the local TTS server
+├─ "Kokoro TTS.bat"           desktop GUI
+├─ speak.bat                  speak a string or file from the command line
+├─ speak_clipboard.bat        read the clipboard out loud
+├─ requirements.txt           root convenience: -r Kokoro-TTS/requirements.txt
+│
+├─ Kokoro-TTS/                the TTS engine (no model files)
+│  ├─ tts.py                  synthesis, voices, audio I/O and CLI
+│  ├─ gui.py                  small tkinter desktop app
+│  ├─ download_models.py      fetch + SHA-256 verify model and voices
+│  └─ requirements.txt        runtime package pins
+│
+├─ server/
+│  └─ server.py               local HTTP server (/health, /voices, /tts)
+│
+├─ extension/                 load this folder in Chrome / Edge
+│  ├─ manifest.json           Manifest V3 definition
+│  ├─ background.js           service worker (CORS-free fallback fetch)
+│  ├─ content.js              chapter extraction, control bar, playback
+│  ├─ popup.html / popup.js   toolbar settings popup
+│  └─ icons/                  icon16.png, icon48.png, icon128.png
+│
+├─ tools/
+│  ├─ check_server.py         command-line smoke test
+│  ├─ checksums.py            generate / verify SHA-256 manifests
+│  └─ make_icons.py           regenerate the logo assets and icons
+│
+├─ docs/                      SETUP, USAGE, ARCHITECTURE, CHECKSUMS
+├─ assets/                    logo.jpg (artwork) and the generated PNGs
+│
+├─ models/                    downloaded model files   (ignored by git)
+├─ voices/                    extra voice packs        (ignored by git)
+└─ output/                    generated audio          (ignored by git)
 ```
 
 The repository ships **no model files**. `models/`, `voices/` and `output/` are
-empty placeholders (`.gitkeep`) and are filled in by `setup.bat`.
+empty placeholders (`.gitkeep`) that `setup.bat` fills in — the 330 MB Kokoro
+weights are downloaded and SHA-256 verified, never committed.
+
+## Documentation
+
+| Document | What it covers |
+| --- | --- |
+| [`docs/SETUP.md`](docs/SETUP.md) | Build from scratch, including in a new folder |
+| [`docs/USAGE.md`](docs/USAGE.md) | Reading with the extension and the standalone tools |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | How the engine, server and extension fit together |
+| [`docs/CHECKSUMS.md`](docs/CHECKSUMS.md) | Model SHA-256 values and archive verification |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | Development setup, checks and pull-request flow |
+| [`CREDITS.md`](CREDITS.md) | Attribution for Kokoro and the libraries used |
+| [`CHANGELOG.md`](CHANGELOG.md) | Release history |
+| [`SECURITY.md`](SECURITY.md) | How to report a vulnerability |
 
 ## Command-line check
 
