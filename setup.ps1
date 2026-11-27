@@ -23,6 +23,10 @@ param(
 $ErrorActionPreference = "Stop"
 Set-Location $PSScriptRoot
 
+# The uv cache and the project may live on different drives. Copying is expected
+# here and avoids uv's "failed to hardlink files" warning.
+$env:UV_LINK_MODE = "copy"
+
 $venv   = Join-Path $PSScriptRoot ".venv"
 $python = Join-Path $venv "Scripts\python.exe"
 $engine = Join-Path $PSScriptRoot "Kokoro-TTS"
